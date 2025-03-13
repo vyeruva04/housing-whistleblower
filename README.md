@@ -19,4 +19,14 @@ My specific contributions in regards to the development of this app included:
 - User/Admin/SuperAdmin group logistics
 - Software changes (including dynamic report status view feature)
 - General User Interface implementations
-- 
+
+To run this project locally:
+1. Run the following commands in terminal and fill out the values in the resulting env file:
+   chmod +x setup.sh
+   ./setup.sh
+
+2. Run these commands next to start the server:
+   source venv/bin/activate 
+   python manage.py runserver
+
+3. Open http://127.0.0.1:8000/ in your browser.
