@@ -1,0 +1,181 @@
+{% load socialaccount %}
+{% providers_media_js %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html>
+    <head>
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+            .navbar-custom {
+                background-color: #007bff;
+                padding: 0.5rem 0;
+            }
+            .nav-item {
+                color: white;
+                text-decoration: none;
+                padding: 0.5rem 1rem;
+                display: inline-block;
+            }
+            .container {
+                padding: 2rem 1rem;
+                margin-top: 60px; /* Adjust based on navbar height */
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+            .report-detail {
+                margin-bottom: 1rem;
+            }
+            .btn-custom {
+                background-color: black;
+                color: white;
+                border: none;
+                border-radius: 25px;
+                padding: 5px 10px;
+                text-decoration: none;
+                display: inline-block;
+                margin-top: 10px;
+            }
+            .btn-delete {
+                background-color: red;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                padding: 5px 10px; /* Smaller padding for a smaller button */
+                text-decoration: none;
+                display: inline-block;
+            }
+            .section {
+                border: 1px solid #ccc;
+                padding: 1rem;
+                border-radius: 5px;
+                margin-bottom: 1rem;
+            }
+        </style>
+        <title>Report View</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+            <div class="container-fluid justify-content-end">
+                <a class="btn nav-item" href="{% url 'whistleblower:home' %}">Home</a>
+            </div>
+        </nav>
+        {% block content %}
+
+        <div class="container">
+            <div class="header">
+                <h1>Report View</h1>
+                {% if not is_admin %}
+                    <a href="{% url 'whistleblower:delete' report.id %}" class="btn-delete">Delete</a>
+                {% endif %}
+            </div>
+            <div class="section">
+                <p class="report-detail"><strong>Reporter:</strong> {{report.reporter_first_name}} {{report.reporter_last_name}}</p>
+                <p class="report-detail"><strong>Reporter Email:</strong> {{report.reporter_email}}</p>
+                <p class="report-detail"><strong>Complaint Title:</strong> {{report.complaint_title}}</p>
+                <p class="report-detail"><strong>Complaint Type:</strong> {{report.complaint_type_phrase}}</p>
+                <p class="report-detail"><strong>Sent Date:</strong> {{report.sent_date}}</p>
+                <p class="report-detail"><strong>Incident Date:</strong> {{report.incident_date}}</p>
+                <p class="report-detail"><strong>Respondent Name:</strong> {{report.respondent_name}}</p>
+                <p class="report-detail"><strong>Location Address:</strong> {{report.location_address}}</p>
+                <p class="report-detail"><strong>Location Description:</strong> {{report.location_description}}</p>
+                <p class="report-detail"><strong>Incident Description:</strong> {{report.incident_description}}</p>
+                <p class="report-detail"><strong>Additional Info:</strong> {{report.additional_information}}</p>
+                <p class="report-detail"><strong>Urgency:</strong> {{report.urgency}}</p>
+                <p class="report-detail"><strong>Status:</strong> {{report.complaint_status_phrase}}</p>
+                {% if report.file1 == "" %}
+                <div>
+                    <p> File 1: None </p>
+                </div>
+                {% elif 'jpg' in report.file1 %}
+                <div>
+                    <img src="{{ report.file1.url }}" alt="Uploaded Image" style="width: 100%; height: auto;">
+                </div>
+                {% elif 'txt' in report.file1 %}
+                <div>
+                    <iframe src="{{ report.file1.url }}" alt="Uploaded Text File"></iframe>
+                </div>
+                {% else %}
+                <div>
+                    <embed src ="{{ report.file1.url }}" alt="Uploaded PDF" style="width: 100%; height:100%">
+                </div>
+                {% endif %}
+                {% if report.file2 == "" %}
+                <div>
+                    <p> File 2: None </p>
+                </div>
+                {% elif 'jpg' in report.file2 %}
+                <div>
+                    <img src="{{ report.file2.url }}" alt="Uploaded Image" style="width: 100%; height: auto;">
+                </div>
+                {% elif 'txt' in report.file2 %}
+                <div>
+                    <iframe src="{{ report.file2.url }}" ></iframe>
+                </div>
+                {% else %}
+                <div>
+                    <embed src = "{{ report.file2.url }}" alt="Uploaded PDF" style="width: 100%; height:100%">
+                </div>
+                {% endif %}
+                {% if report.file3 == "" %}
+                <div>
+                    <p> File 3: None </p>
+                </div>
+                {% elif 'jpg' in report.file3 %}
+                <div>
+                    <img src="{{ report.file3.url }}" alt="Uploaded Image" style="width: 100%; height: auto;">
+                </div>
+                {% elif 'txt' in report.file3 %}
+                <div>
+                    <iframe src="{{ report.file3.url }}" ></iframe>
+                </div>
+                {% else %}
+                <div>
+                    <embed src = "{{ report.file3.url }}" alt="Uploaded PDF" style="width: 100%; height:100%">
+                </div>
+                {% endif %}
+            </div>
+
+            {% if is_admin %}
+            <div class="section">
+                {% if resolved %}
+                <form method="post" action="{% url 'whistleblower:reopen_report' report.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-custom">Reopen Report</button>
+                </form>
+                {% else %}
+                <form method="post" action="{% url 'whistleblower:mark_as_resolved' report.id %}">
+                    {% csrf_token %}
+                    <textarea id="resolution_notes" name="resolution_notes" rows="5" cols="50" class="form-control"></textarea>
+                    <button type="submit" class="btn-custom">Mark as Resolved</button>
+                </form>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="section">
+                <h5>Admin Notes</h5>
+                {% if has_notes %}
+                <p>{{ report.resolution_notes }}</p>
+                {% else %}
+                <p>No notes available at this time.</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        <div class=footer>
+            {% include 'whistleblower/footer.html' %}
+        </div>
+        {% endblock content %}      
+    </body>
+</html>
+
+
+

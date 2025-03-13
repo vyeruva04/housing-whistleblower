@@ -1,0 +1,48 @@
+{% load socialaccount %}
+{% providers_media_js %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+
+<html lang="en">
+<head>
+    <Title> Issue </Title>
+    <meta charset="UTF-8">
+    <style>
+        body, html {
+            margin-top: 0;
+            padding-top: 0;
+        }
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .dashboard-buttons .btn {
+            margin: 0.5rem;
+        }
+        .dashboard-buttons .btn-dark:hover {
+            background-color: #fff; 
+            color: #000; 
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header mt-5 pt-5">
+            <h1>There was an issue with uploading your files, please try again!</h1>
+        </div>
+        <div class="dashboard-buttons d-flex justify-content-center">
+            <a class="btn btn-dark" href="/login/">Back</a>
+        </div>
+    </div>
+    <div class=footer>
+        {% include 'whistleblower/footer.html' %}
+    </div>
+</body>
+</html>

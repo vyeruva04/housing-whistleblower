@@ -1,0 +1,72 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load widget_tweaks %} 
+
+
+<html>
+    <head>
+        <style>
+            body, html {
+                margin-top: 0;
+                padding-top: 0;
+            }
+            .navbar-custom {
+                background-color: #007bff;
+            }
+            .nav-item {
+                color: white;
+                background-color: #007bff;
+            }
+            .form-container {
+                margin-top: 2rem; 
+                margin-bottom: 4rem;
+            }
+            .form-container form {
+                width: 100%;
+            }
+        </style>
+        <title>Building Complaint</title>
+    </head>
+    <body>
+        {% block content %}
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+                <div class="container-fluid justify-content-end">
+                    <a class="btn nav-item" href="{% url 'whistleblower:home' %}">Home</a>  <!-- Link for authenticated users -->
+                </div>
+            </nav>
+            <div class="form-container mt-5 pt-5">
+                <h1 class="mb-4">Building Report Form</h1>
+                <h6 class="mb-4"> Required (*) </h6>
+                <form method="post" enctype="multipart/form-data" class="form">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field|add_class:"form-control" }} 
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                </form>
+            </div>
+            <div class=footer>
+                {% include 'whistleblower/footer.html' %}
+            </div>
+            {% endblock content %}
+        
+    </body>
+</html>
+
+

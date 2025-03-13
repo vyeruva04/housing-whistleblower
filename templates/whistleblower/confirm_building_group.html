@@ -1,0 +1,56 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load widget_tweaks %} 
+
+
+<html lang="en">
+    <head>
+        <title>Building Code Display</title>
+        <style>
+            body, html {
+                height: 100%;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+                margin-top: 100px;
+            }
+            .container {
+                font-size: 20px; 
+            }
+            .btn-back {
+                width: 100px; 
+                border-radius: 20px;
+                background-color: #000; 
+                color: #fff; 
+                text-decoration: none;
+                padding: 5px 10px; 
+                display: inline-block;
+                text-align: center;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+
+</html>
+
+<body>
+    {% block content %}
+    <div class="container mb-3">
+        <p>
+            Your building code is {{ group_id }}. <br>
+            Share this with your residents to allow them to join the building and submit reports. <br>
+            <a class="btn-back" href="{% url 'whistleblower:home_admin' %}">Back</a>
+        </p>
+    </div>
+    <div class=footer>
+        {% include 'whistleblower/footer.html' %}
+    </div>
+    {% endblock content %}
+    
+</body>
+

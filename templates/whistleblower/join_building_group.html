@@ -1,0 +1,65 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html lang="en">
+    <head>
+        <style>
+            body, html {
+                margin-top: 0;
+                padding-top: 0;
+            }
+            .navbar-custom {
+                background-color: #007bff;
+            }
+            .nav-item {
+                color: white;
+                background-color: #007bff;
+            }
+            .form-container {
+                text-align: center; 
+                margin-top: 2rem; 
+            }
+            .form-container form {
+                display: inline-block; 
+                width: 100%; 
+                max-width: 500px; 
+            }
+        </style>
+        <title>Join Group</title>
+    </head>
+
+    <body>
+        {% block content %}
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+                <div class="container-fluid justify-content-end">
+                    <a class="btn nav-item" href="{% url 'whistleblower:home' %}">Home</a>
+                </div>
+            </nav>
+
+            <div class="container form-container mt-5 pt-5">
+                <h1>Join a Building!</h1>
+                <form action="{% url 'whistleblower:join_group' %}" method="post">
+                    {{ error_message }}
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="buildingCode" class="form-label">Building Group Code</label>
+                        <input type="text" class="form-control" id="buildingCode" name="building_code">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div class=footer>
+            {% include 'whistleblower/footer.html' %}
+        </div>
+        {% endblock content %} 
+    </body>
+
+
+
+</html>

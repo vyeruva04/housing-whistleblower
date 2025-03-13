@@ -1,0 +1,146 @@
+{% load socialaccount %}
+{% providers_media_js %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body, html {
+            margin-top: 0;
+            padding-top: 0;
+        }
+        .navbar-custom {
+            background-color: #007bff;
+        }
+        .nav-item {
+            color: white;
+            background-color: #007bff;
+        }
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .dashboard-buttons .btn {
+            margin: 0.5rem;
+        }
+        .dashboard-buttons .btn-dark:hover {
+            background-color: #fff; 
+            color: #000; 
+            border: 1px solid #000;
+        }
+        .reports-container {
+            display: flex;
+            justify-content: space-around; 
+            margin-top: 2rem;
+        }
+        .report-list, .groups-section{
+            border: 2px solid #343a40; 
+            padding: 1rem;
+            border-radius: 0.25rem; 
+            width: 48%; 
+        }
+        .groups-section {
+            margin: 2rem auto; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .groups-list {
+            list-style: none; 
+            padding: 0;
+        }
+        .groups-list li {
+            padding: 10px;
+        }
+        .groups-list li:hover {
+            background-color: #f0f0f0; 
+            border-radius: 25px;
+        }
+        .groups-list a {
+            display: none; 
+        }
+        .groups-list li:hover a {
+            display: inline;
+        }
+    </style>
+
+    <Title>Home</Title>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+            <div class="container-fluid justify-content-end">
+                <a class="btn nav-item" href="{% url 'whistleblower:logout' %}">Logout</a>
+            </div>
+        </nav>
+        <div class="dashboard-header mt-5 pt-5">
+            <h1>Welcome to your dashboard, {{ name }}!</h1>
+        </div>
+        <div class="dashboard-buttons d-flex justify-content-center">
+            <a class="btn btn-dark" href="{% url 'whistleblower:join_group_page' %}">Join a Building</a>
+            <a class="btn btn-dark" href="{% url 'whistleblower:n-complaint' %}">Neighbor Report Form</a>
+            <a class="btn btn-dark" href="{% url 'whistleblower:b-complaint' %}">Building Report Form</a>
+        </div>
+        <div class ="text-center">
+            {{ error_message }}
+        </div>
+        <div class="reports-container">
+            <div class="report-list">
+                <h2>Open Reports</h2>
+                <ul>
+                    {% for report in open_reports %}
+                        <li>
+                            <a href="{% url 'whistleblower:report_view' report.id %}">
+                                {{ report.complaint_title }} - {{ report.sent_date }}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <p>No open reports.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="report-list">
+                <h2>Closed Reports</h2>
+                <ul>
+                    {% for report in closed_reports %}
+                        <li>
+                            <a href="{% url 'whistleblower:report_view' report.id %}">
+                                {{ report.complaint_title }} - {{ report.sent_date }}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <p>No closed reports.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="groups-section">
+            <h3>Groups</h3>
+            {% for group in groups %}
+            <ul class="groups-list">
+                <li>
+                    {{group.name}} <a href="{% url 'whistleblower:leave_building_group' group.pk %}">Leave</a>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+
+
+
+    </div>
+    <div class=footer>
+        {% include 'whistleblower/footer.html' %}
+    </div>
+</body>
+</html>

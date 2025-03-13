@@ -1,0 +1,48 @@
+{% load socialaccount %}
+{% providers_media_js %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project B-10</title>
+    <style>
+        .full-height {
+            min-height: 50vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+        }
+        .centered-content {
+            text-align: center;
+        }
+        .btn-custom {
+            width: 200px; 
+            border-radius: 20px; 
+        }
+        .mt-xl {
+            margin-top: 100px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="d-flex justify-content-center mt-xl">
+        <h1>Welcome to Project B-10</h1>
+    </div>
+    <div class="login-container full-height">
+        <div class="d-flex justify-content-center align-items-center flex-column centered-content">
+            <a class="btn btn-primary mb-2 btn-custom" href="{% provider_login_url 'google' %}">Login with Google</a>
+            <a class="btn btn-secondary mt-2 btn-custom" href="{% url 'whistleblower:home_anon' %}">Login Anonymously</a>
+        </div>
+    </div>
+    <div class=footer>
+        {% include 'whistleblower/footer.html' %}
+    </div>
+</body>
+</html>
